@@ -1,0 +1,4 @@
+# ignore everything
+*
+# ignore excexptions
+!.gitignore
