@@ -216,3 +216,34 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+# LaTex files
+*.aux
+*.bbl
+*.blg
+*.lof
+*.log
+*.lot
+*.out
+*.toc
+
+# folders
+**/logs/
+**/test/
+
+
+# files
+*.DS_Store
+*-ex.R
+.Rproj.user
+*.zip
+*.docx
+*.pdf
+*.pptx
+*.wav
+*.csv
+*.txt
+*.html
+*.png
+*.gif
+*dev*
