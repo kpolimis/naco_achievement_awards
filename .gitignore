@@ -226,6 +226,7 @@ rsconnect/
 *.lot
 *.out
 *.toc
+*.tex
 
 # folders
 **/logs/
