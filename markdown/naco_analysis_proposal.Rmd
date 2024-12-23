@@ -1,0 +1,229 @@
+---
+title: "Proposal for NACo Achievement Award Analysis"
+subtitle: "Scope of Work, Cost Estimate, and Timeline"
+author: "Atlas Analytics"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+output: pdf_document
+---
+```{r setup, include=FALSE, warning=F, message=F, results='asis'}
+library(scales)
+library(pander)
+library(dplyr)
+library(readr)
+library(here)
+```
+
+## Client Information
+
+**Client Name:** [Client's Name]  
+**Company Name:** [Company's Name]  
+**Contact Person:** [Contact's Name]  
+**Email:** [Contact's Email]  
+**Phone:** [Contact's Phone Number]  
+**Project Start Date:** [Start Date]  
+**Project End Date:** [End Date]
+
+## Project Overview
+
+The project involves the following key activities:
+
+1. **Web Scraping:** Extracting data from multiple websites.
+2. **Database Creation:** Creating a database from the scraped data
+3. **Descriptive Analysis:** Performing  descriptive analyses
+4. **NLP/Statistical Analysis:** Analyzing text data to predict winners of NACO Achievement Awards
+
+## Scope of Work
+
+### 1. Web Scraping
+
+- **Objective:** Extract data from multiple websites and store it in a structured format.
+- **Websites:** [List the websites, if known]
+- **Tools:** Python (BeautifulSoup, Scrapy, Selenium, etc.)
+  - **Selenium**: For interacting with and scraping dynamic web pages.
+  - **Requests**: For fetching static web pages.
+  - **BeautifulSoup**: For parsing HTML and XML data.
+- **Estimated Duration:** 8 hours for scraping scripts to run.
+- **Deliverables:** Scraping scripts, collected data in CSV/JSON format.
+
+### 2. Database Creation
+
+- **Objective:** This phase focuses on building a robust database to store and manage the scraped data, ensuring it is ready for analysis.
+  + **Design Database Schema**: Create a schema to structure the data appropriately.
+  + **Data Cleaning and Import**: Clean the data and import it into the database.
+  + **Data Integrity**: Implement normalization and relationship management to maintain data integrity.
+- **Tools:** Python (Pandas), SQL, R
+  - **SQLite**: For a lightweight, self-contained database.
+  - **Pandas**: For data cleaning and manipulation.
+- **Estimated Duration:** 20 hours (4 days)
+- **Deliverables:** Structured database with imported data.
+
+### 3. Descriptive Analysis
+
+- **Objective:** Conduct a descriptive analysis to explore the dataset and identify key trends and patterns.
+  + **Generate Descriptive Statistics**: Calculate key statistics to summarize the data.
+  + **Create Visualizations**: Visualize trends over time, by category, county, and state.
+  + **Summarize Findings**: Provide a summary of key insights from the data.
+- **Tools:** Python (Pandas), SQL
+  - **Pandas**: For data analysis and manipulation.
+  - **Matplotlib/Seaborn**: For creating visualizations.
+- **Estimated Duration:** 12 hours (2 days)
+- **Deliverables:** Visualizations and summary report of key findings.
+
+### 4. NLP/Statistical Analysis
+
+- **Objective:** Utilize natural language processing (NLP) and statistical methods to predict award winners based on text data.
+- **Tools:** Python (NLTK, SpaCy, Scikit-learn)
+  - **Scikit-learn**: For machine learning and statistical analysis.
+  - **NLTK/Spacy**: For natural language processing.
+- **Estimated Duration:** 24 hours (3 days)
+- **Deliverables:** Predictive model, analysis report, and prediction results.
+
+# Cost Estimate
+
+```{r cost_estimate, echo=FALSE}
+# Write the cost estimate table to a CSV file
+cost_estimate <- data.frame(
+  Phase = c("Web Scraping", "Database Creation", "Descriptive Analysis", "NLP/Statistical Analysis"),
+  Role = c("Junior Developer", "Senior Developer", "Senior Data Scientist", "Senior Data Scientist"),
+  Estimated_Hours = c(20, 15, 20, 30),
+  Hourly_Rate = c(75, 100, 120, 150),
+  Estimated_Cost = c(1500, 1500, 2400, 4500)
+)
+write_csv(cost_estimate, here("output/cost_estimate.csv"))
+```
+
+```{r cost_estimate_table, echo=FALSE}
+# Display the timeline table using pander
+cost_estimate2_cols <- c("Phase", "Role", "Estimated Hours",
+                         "Hourly Rate ($)", "Estimated Cost ($)")
+cost_estimate2 <- cost_estimate %>%
+         mutate(Hourly_Rate = dollar(Hourly_Rate),
+                Estimated_Cost = dollar(Estimated_Cost)) %>%
+  add_row(Phase = "Total", Role = "", 
+          Estimated_Hours = sum(cost_estimate$Estimated_Hours),
+          Hourly_Rate = "",
+          Estimated_Cost = dollar(sum(cost_estimate$Estimated_Cost))) %>%
+  `colnames<-`(cost_estimate2_cols)
+pander(cost_estimate2, split.table = Inf, keep.line.breaks = TRUE,
+       emphasize.rownames = FALSE,  caption = "Cost Estimate")
+```
+
+
+<!-- | Phase                    | Role                | Estimated Hours | Hourly Rate (\$) | Estimated Cost (\$) | -->
+<!-- |--------------------------|---------------------|-----------------|-----------------|--------------------| -->
+<!-- | Web Scraping             | Junior Developer    | 20              | 75              | 1,500              | -->
+<!-- | Database Creation        | Senior Developer    | 15              | 100             | 1,500              | -->
+<!-- | Descriptive Analysis     | Senior Data Scientist | 20           | 120             | 2,400              | -->
+<!-- | NLP/Statistical Analysis | Senior Data Scientist | 30           | 150             | 4,500              | -->
+<!-- | **Total**                |                     | **85**          |                 | **9,900**          | -->
+
+### Breakdown by Phase and Role
+
+**Web Scraping**:
+
+- **Role**: Junior Developer
+- **Tasks**: Writing and running scripts to extract data from websites. Suitable for a junior developer due to the relatively straightforward nature of the tasks involved.
+- **Estimated Hours**: 20 hours
+- **Hourly Rate**: $75
+- **Estimated Cost**: $1,500
+
+**Database Creation**:
+
+- **Role**: Senior Developer
+- **Tasks**: Designing and implementing the database schema, importing data, and ensuring data integrity. Requires experience in database design and management, which is ideal for a senior developer.
+- **Estimated Hours**: 15 hours
+- **Hourly Rate**: $100
+- **Estimated Cost**: $1,500
+
+**Descriptive Analysis**:
+
+- **Role**: Senior Data Scientist
+- **Tasks**: Performing statistical analysis and generating visualizations. Involves advanced analytical skills and knowledge of data science best practices.
+- **Estimated Hours**: 20 hours
+- **Hourly Rate**: $120
+- **Estimated Cost**: $2,400
+
+**NLP/Statistical Analysis**:
+
+- **Role**: Senior Data Scientist
+- **Tasks**: Conducting text analysis, feature engineering, and model training. This phase involves complex statistical and machine learning techniques, requiring a senior data scientist's expertise.
+- **Estimated Hours**: 30 hours
+- **Hourly Rate**: $150
+- **Estimated Cost**: $4,500
+
+### Summary of Costs
+
+The total estimated cost for the project is **$9,900**, covering all phases from web scraping to advanced NLP and statistical analysis. Each task is allocated to a role best suited to ensure efficiency and expertise in execution.
+
+# Timeline
+
+```{r timeline, echo=FALSE}
+# Write the timeline table to a CSV file
+timeline <- data.frame(
+  Phase = c("Web Scraping", "Database Creation", "Descriptive Analysis", "NLP/Statistical Analysis"),
+  Start_Date = c(format(Sys.Date(), "%Y-%m-%d"), format(Sys.Date() + 6, "%Y-%m-%d"), format(Sys.Date() + 11, "%Y-%m-%d"), format(Sys.Date() + 16, "%Y-%m-%d")),
+  End_Date = c(format(Sys.Date() + 5, "%Y-%m-%d"), format(Sys.Date() + 10, "%Y-%m-%d"), format(Sys.Date() + 15, "%Y-%m-%d"), format(Sys.Date() + 25, "%Y-%m-%d")),
+  Duration_Days = c(5, 5, 5, 10)
+)
+write_csv(timeline, here("output/timeline.csv"))
+```
+
+```{r timeline_table, echo=FALSE}
+# Display the timeline table using pander
+
+timeline2_cols <- c("Phase", "Start Date", "End Date", "Duration (Days)")
+
+timeline2 <- timeline %>%
+  add_row(Phase = "", Start_Date = "",  End_Date = "",
+          Duration_Days = sum(timeline$Duration_Days)) %>%
+  `colnames<-`(timeline2_cols)
+
+pander(timeline2, split.table = Inf, keep.line.breaks = TRUE,
+       emphasize.rownames = FALSE,  caption = "Project Timeline")
+```
+
+<!-- | Phase                    | Start Date        | End Date          | Duration (Days) | -->
+<!-- |--------------------------|-------------------|-------------------|-----------------| -->
+<!-- | Web Scraping             | `r Sys.Date()`    | `r Sys.Date() + 5` | 5               | -->
+<!-- | Database Creation        | `r Sys.Date() + 6` | `r Sys.Date() + 10` | 5             | -->
+<!-- | Descriptive Analysis     | `r Sys.Date() + 11` | `r Sys.Date() + 15` | 5            | -->
+<!-- | NLP/Statistical Analysis | `r Sys.Date() + 16` | `r Sys.Date() + 25` | 10           | -->
+<!-- | **Total**                |                   |                   | **25 Days**     | -->
+
+# Conclusion
+
+This proposal provides a detailed plan for the software engineering project, including estimated costs and timelines for each phase. The assignment of roles ensures that each task is handled by a specialist with the appropriate skills, contributing to the project's success. We are committed to delivering a high-quality solution that meets your needs and expectations.
+
+---
+
+**Contact Information**
+
+For any queries or further information, please contact:
+
+- **Kivan Polimis**
+- **Email:** kivan@analyticsbyatlas.com
+- **Phone:** 713-292-6693
+
+## Payment Terms
+
+- **Initial Deposit:** 30% of the total cost ($2,970) before project initiation.
+- **Mid-Project Payment:** 30% of the total cost ($2,970) upon completion of web scraping and database creation.
+- **Final Payment:** 40% of the total cost ($3,960) upon project completion.
+
+## Terms and Conditions
+
+1. Any changes in project scope may incur additional costs.
+2. Payment is due within 30 days of invoice receipt.
+3. Confidentiality and data security will be strictly maintained throughout the project.
+
+## Acceptance
+
+By signing below, you agree to the terms and conditions outlined in this proposal and authorize us to proceed with the project as described.
+
+**Client Signature:** _____________________  
+**Date:** _____________________
+
+**Authorized Representative:** _____________________  
+**Date:** _____________________
+
+This proposal includes detailed breakdowns of tasks, estimated hours, and associated costs, providing a clear understanding of what the client can expect in terms of deliverables and budget. Adjustments can be made based on client-specific requirements or negotiations.

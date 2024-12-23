@@ -1,0 +1,238 @@
+---
+title: "NACo Achievement Award Analysis"
+subtitle: "Web Scraping, Database Creation, Descriptive Analysis, and NLP"
+author: "Atlas Analytics"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+output: 
+  html_document:
+    theme: united
+    number_sections: no
+    toc: yes
+    toc_depth: 2
+    toc_float:
+      collapsed: no
+      smooth_scroll: yes
+    df_print: paged
+    code_folding: show
+    keep_md: no
+  word_document: default
+  pdf_document:
+    toc: yes
+    toc_depth: 2
+  powerpoint_presentation:
+always_allow_html: yes
+knit: (function(inputFile, encoding){
+  rmarkdown::render("tech_summary_naco_analysis.Rmd", encoding = encoding,
+  output_format = "all")})
+---
+<!-- pandoc_args: --listings -->
+<!--     includes: -->
+<!--       in_header: preamble.tex -->
+    
+```{r setup, include=FALSE, warning=F, message=F, results='asis'}
+library(knitr)
+# opts_chunk$set(tidy.opts=list(width.cutoff=80),tidy=TRUE)
+```
+
+# Abstract
+  
+Report abstract 
+\newpage  
+
+
+# Introduction
+  
+This report outlines the initial steps taken in the project to scrape data from multiple websites, create a structured database from the collected data, and perform a comprehensive descriptive analysis. Additionally, it provides a framework for the upcoming NLP and statistical analysis to predict award recipients using text data.
+
+# Web Scraping
+
+## Objectives
+The primary goal of the web scraping phase was to collect relevant data from multiple websites that contain information pertinent to predicting award winners. This data forms the basis for subsequent analysis.
+
+## Methods
+We employed a combination of Python libraries for web scraping to efficiently extract data from both static and dynamic web pages.
+
+* **Selenium:** Selenium was used for automating browser actions and handling dynamic content. This tool is particularly useful for scraping websites where content is generated through JavaScript or requires user interaction to reveal data, such as clicking buttons or scrolling.
+
+* **Requests:** The Requests library was utilized to handle HTTP requests and retrieve static web pages. It is highly effective for extracting data from straightforward HTML pages without dynamic content.
+
+* **BeautifulSoup:** BeautifulSoup was used to parse the HTML content retrieved by Requests and Selenium. It facilitated the extraction and navigation of data from complex HTML structures.
+
+* 5 minutes/page
+  + 909 pages 
+  + 4545 minutes
+  + That's about 75.75 hours of continuous work. However, in reality, breaks, distractions, and fatigue would likely increase the overall time.
+* https://www.naco.org/page/achievement-awards?_page=1
+* https://www.naco.org/resources/award-programs/scripting-security-standardization-and-savings
+* https://www.naco.org/page/achievement-awards?field_county=1247&_page=2
+
+### Example: Scraping Achievement Awards Table
+
+To illustrate the web scraping process, let's consider scraping the achievement awards table from the [National Association of Counties (NACo) Achievement Awards](https://www.naco.org/page/achievement-awards?_page=1) page.
+
+**Objective:** Extract award data including year, county, program, program link, category, and best-in-category status from the table.
+
+**Scraping Process:**
+
+1. **Fetch the Web Page:** Use Requests to get the page content.
+2. **Parse with BeautifulSoup:** Use BeautifulSoup to parse the HTML content and locate the table.
+3. **Handle Dynamic Content with Selenium:** Use Selenium to interact with the page and ensure all table data is loaded.
+
+**Example Output:**
+```python
+{
+  'year': '2023', 
+  'county': 'Citrus County, Fla.', 
+  'program': 'Scripting for Security, Standardization, and Savings', 
+  'program_link': 'https://www.naco.org/resources/award-programs/scripting-security-standardization-and-savings', 
+  'category': 'Information Technology', 
+  'best_in_category': False
+}
+```
+**Extracted Table Data**
+Here is an example of the table data extracted from the NACo Achievement Awards page:
+
+### Example: Extracting Detailed Information from Program Page
+
+To further illustrate the scraping process, let's extract detailed information from the NACo award page for the program “Scripting for Security, Standardization, and Savings.”
+
+Objective: Extract detailed data including county name, state, year, category, best-in-category status, and description of the program.
+
+**Example Output:**
+
+```python
+{
+  'county_name': 'Citrus County',
+  'state': 'FL',
+  'year': '2023',
+  'program': 'Scripting for Security, Standardization, and Savings', 
+  'category': 'Information Technology',
+  'best_in_category': True,
+  'description': "Limited IT staff, increased staff turnover county-wide, and the need to quickly and efficiently provision and deprovision staff forced the IT staff streamline complex, time-consuming, and repetitive tasks. The process of user account provisioning and deprovisioning as well as workstation configuration is a critical task for any IT department, but it can be time-consuming and error-prone if done manually. PowerShell provides a powerful automation tool that can help streamline this process and save time while improving accuracy. Using PowerShell, IT professionals can create scripts that automate the creation, modification, and removal of user accounts, as well as the assignment of permissions and groups. By leveraging PowerShell's extensive library of commands and functions, IT ensures that each step in the process executes correctly, reduces the risk of errors, and minimizes the potential for security breaches. Moreover, PowerShell's ability to integrate with other tools and systems allows for greater flexibility and customization, making it an ideal solution. With its power and versatility, PowerShell became a valuable asset to the IT department to optimize user account provisioning and deprovisioning processes and secure computer configurations."
+}
+```
+
+Extracted Detailed Data
+Here is the extracted information from the NACo award page for the program:
+  
+# Database Creation and Descriptive Analysis
+  
+## Objectives
+
+The goal of this phase was to store and manage the scraped data efficiently and perform a detailed descriptive analysis to uncover patterns and trends in the data.
+
+## Methods
+* **Database Creation:** We used SQLite to create a relational database to store the structured data. SQLite was chosen for its simplicity and ability to handle complex queries.
+* **Descriptive Analysis:** Python’s Pandas library was used for data manipulation and analysis, and Matplotlib and Seaborn for creating visualizations.
+
+### Process
+1. **Database Design:**
+  A database schema was designed to include tables for awards, recipients, abstracts, and additional metadata. Each table was connected through foreign keys to ensure data integrity and normalization, reducing redundancy and improving data quality.
+
+2. **Data Import:**
+  The cleaned data from the scraping phase was imported into the database. Structured tables were created for different aspects of the data, such as:
+  - Awards table with details like year, category, and program.
+  - Recipients table with details such as county and state.
+  - Abstracts table with the textual content of award abstracts.
+
+![NACo Website Duplicates](./images/naco_website_duplicate.png)
+\newline 
+
+3. **Descriptive Statistics:**
+
+Comprehensive descriptive statistics were generated to summarize the data. This included:
+
+* **Frequencies Over Time:** The number of awards given each year was calculated to observe trends and patterns over time.
+* **Category Analysis:** Awards were analyzed by category to identify the most common and emerging categories.
+* **Geographical Analysis:** The distribution of awards was examined by county and state to highlight regional trends and areas with higher award frequencies.
+* **Visualizations:** Histograms, bar charts, line plots, and maps were created to visualize the data distributions and trends.
+
+### Key Findings
+
+* **Trend Over Time:** There was a notable increase in the number of awards over the past decade, suggesting growing recognition of various programs.
+* **Category Distribution:** Information Technology and Education emerged as the most frequent award categories.
+* **Geographical Insights:** Certain counties and states, particularly in the Northeast and West Coast, had a higher frequency of award recipients.
+
+### Example Visualizations
+
+* **Submission and Awards Over Time:**
+
+![Submissions and Awards Over Time](../output/plots/submissions_win_pct_plot.pdf)
+
+<!-- \begin{figure}[!ht] -->
+<!--     \centering -->
+<!--     \includegraphics[height=0.5\textheight,keepaspectratio]{../output/plots/submissions_win_pct_plot.pdf} -->
+<!--     \caption{Submissions and Awards Over Time} -->
+<!--     \label{fig:submissions_awards} -->
+<!-- \end{figure}   -->
+
+* **Geographical Distribution:**
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[height=0.5\textheight,keepaspectratio]{../output/plots/county_level_win_pct_submissions.pdf}
+    \caption{County-Level Win Percentage for NACo Achievement Award Submissions}
+    \label{fig:county_level_win_pct_submissions}
+\end{figure}  
+
+# NLP and Statistical Analysis
+
+## Objectives
+
+The primary goal of this phase is to predict the likelihood of an individual or entity winning an award based on text data from abstracts.
+
+## Planned Methods
+
+* **Natural Language Processing (NLP):** To preprocess and analyze the text data.
+* **Statistical Analysis:** To model and predict award outcomes.
+
+### Steps for Analysis
+
+1. **Text Preprocessing:**
+* **Tokenization:** Split text into individual words or tokens for further analysis.
+* **Stopword Removal:** Remove common words (e.g., "the", "and") that do not contribute to the model.
+* **Stemming and Lemmatization:** Reduce words to their root forms to standardize variations.
+* **TF-IDF Vectorization:** Transform text data into numerical values based on word frequency and importance.
+
+2. **Feature Engineering:**
+* **Sentiment Analysis:** Assess the sentiment of the text and use it as a feature in the model.
+* **Topic Modeling:** Identify common themes or topics within the abstracts to understand underlying patterns.
+* **N-gram Analysis:** Examine word sequences to capture contextual information and patterns.
+
+3. **Model Building:**
+* **Data Split:** Divide the dataset into training and test sets to validate the model.
+* **Model Selection:** Evaluate different models, such as logistic regression, random forests, and neural networks, to identify the best-performing model.
+* **Cross-Validation:** Perform cross-validation to ensure the model's robustness and prevent overfitting.
+
+4. **Prediction and Evaluation:**
+* **Prediction:** Use the trained model to predict the likelihood of an award being won based on new abstract data.
+ * **Evaluation Metrics:** Evaluate the model using metrics such as accuracy, precision, recall, and F1 score to determine its effectiveness.
+
+5. **Temporal Analysis:**
+ * **Time Series Analysis:** Explore trends over time to see how the predictors and predictions evolve.
+ * **Cohort Analysis:** Examine how predictions change across different groups or time periods, providing insights into evolving trends and factors influencing award outcomes.
+
+# Conclusion
+
+The initial stages of data collection, storage, and analysis have laid a robust foundation for predictive modeling. The upcoming NLP and statistical analysis will leverage these insights to build a model capable of predicting award recipients with high accuracy. This project aims to provide valuable forecasts that can aid in decision-making and strategic planning for future awards.
+
+\newpage
+
+# References
+
+1. Selenium Documentation: https://www.selenium.dev/documentation/en/
+2. Requests Documentation: https://requests.readthedocs.io/en/latest/
+3. BeautifulSoup Documentation: https://www.crummy.com/software/BeautifulSoup/bs4/doc/
+4. Pandas Documentation: https://pandas.pydata.org/pandas-docs/stable/index.html
+5. Matplotlib Documentation: https://matplotlib.org/stable/contents.html
+6. Seaborn Documentation: https://seaborn.pydata.org/
+7. SQLite Documentation: https://sqlite.org/docs.html
+
+\newpage
+
+# Appendix
+
+* **Submission and Awards (by Category) Over Time:**
+
+<center>
+![](../output/plots/submissions_win_pct_facet_plot.pdf){height=1000px width=720px}}
+</center>
